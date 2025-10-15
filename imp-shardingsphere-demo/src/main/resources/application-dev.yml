@@ -1,0 +1,137 @@
+server:
+  port: 8895
+
+logging:
+  level:
+    root: info
+    com.imp.all.dao: debug
+
+spring:
+  shardingsphere:
+    enabled: true
+    datasource:
+      # 配置真实数据源
+      names: db0,db1,slave01,slave02
+      db0:
+        url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        username: root
+        password: 123456
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+      db1:
+        url: jdbc:mysql://localhost:3306/test2?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        username: root
+        password: 123456
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+      slave01:
+        url: jdbc:mysql://localhost:3306/test3?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        username: root
+        password: 123456
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+      slave02:
+        url: jdbc:mysql://localhost:3306/test4?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        username: root
+        password: 123456
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+    # 默认数据源，未分片的表默认执行库
+    sharding:
+      default-data-source-name: db0
+    rules:
+      readwrite-splitting:
+        data-sources:
+          db0: # readwrite-splitting-data-source-name
+            type: Static
+            load-balancer-name: alg_round  # 负载均衡算法名称
+            props:
+              # 注意，如果接口有事务，读写分离不生效，默认全部使用主库，为了保证数据一致性
+              write-data-source-name: db0
+              read-data-source-names: slave01
+          db1: # readwrite-splitting-data-source-name
+            type: Static
+            load-balancer-name: alg_round  # 负载均衡算法名称
+            props:
+              # 注意，如果接口有事务，读写分离不生效，默认全部使用主库，为了保证数据一致性
+              write-data-source-name: db1
+              read-data-source-names: slave02
+        load-balancers: # 负载均衡算法配置
+          alg_round: #名称自定义，跟上边的 load-balancer-name 配置的值保持一致
+            type: ROUND_ROBIN #一共三种一种是 RANDOM（随机），一种是 ROUND_ROBIN（轮询），一种是 WEIGHT（权重）
+          alg_random:
+            type: RANDOM
+          alg_weight: # 权重算法
+            type: WEIGHT
+            props:
+              slave01: 1
+              slave02: 2
+      sharding:
+        key-generators:
+          # 此处必须要配置，否则会导致报错，因为shardingsphere-jdbc-core-spring-boot-starter需要加载此项配置，官网的demo例子有错
+          # 分布式序列算法：https://shardingsphere.apache.org/document/current/cn/user-manual/common-config/builtin-algorithm/keygen/
+          snowflake:
+            type: SNOWFLAKE
+            props:
+              # 在单机模式下支持用户自定义配置，如果用户不配置使用默认值为0。
+              # 在集群模式下会由系统自动生成，相同的命名空间下不会生成重复的值。
+              worker-id: 0
+        sharding-algorithms:
+          # 分片算法：https://shardingsphere.apache.org/document/current/cn/user-manual/common-config/builtin-algorithm/sharding/
+          table-mod:
+            # 取模类型分片键的值必须是数字，否则会报错
+            type: MOD
+            props:
+              sharding-count: 10
+          database_inline:
+            type: INLINE
+            props:
+              algorithm-expression: db${user_id % 2}
+          table_inline:
+            type: INLINE
+            props:
+              algorithm-expression: orders_${id % 10}
+          database-precise-sharding:
+            type: CLASS_BASED
+            props:
+              strategy: STANDARD
+              algorithmClassName: com.imp.all.shardingsphere.shardingAlgorithm.PreciseShardingDatabaseAlgorithm
+          table-precise-sharding:
+            type: CLASS_BASED
+            props:
+              strategy: STANDARD
+              algorithmClassName: com.imp.all.shardingsphere.shardingAlgorithm.PreciseShardingTableAlgorithm
+        # 分库配置,默认分库策略
+        default-database-strategy:
+          standard:
+            sharding-column: user_id
+            sharding-algorithm-name: database-precise-sharding
+        tables:
+          orders: # 表名
+            # 配置逻辑表:orders与真实库表的对应规则
+            actual-data-nodes: db$->{0..1}.orders_$->{0..9}
+            # 配置 orders 被拆分到多个子库的策略
+            database-strategy:
+              standard:
+                sharding-column: user_id
+                sharding-algorithm-name: database_inline
+            # 配置分表规则
+            table-strategy:
+              standard:
+                sharding-column: id
+#                sharding-algorithm-name: table-mod
+                sharding-algorithm-name: table_inline
+            # 主键生成策略
+            key-generate-strategy:
+              column: id  # 主键列
+              key-generator-name: snowflake  # 策略算法名称(推荐使用雪花算法)
+          students: # 表名
+            actual-data-nodes: db$->{0..1}.students_$->{0..9}
+            # 配置分表规则
+            table-strategy:
+              standard:
+                sharding-column: id
+                sharding-algorithm-name: table-precise-sharding
+    # 展示修改以后的sql语句
+    props:
+      sql-show: true

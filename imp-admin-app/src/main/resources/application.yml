@@ -1,0 +1,6 @@
+spring:
+  profiles:
+    active: dev, multi-datasource, shardingsphere
+
+  banner:
+    location: classpath:banner.txt

@@ -1,0 +1,108 @@
+<configuration>
+    <!-- 引用 Spring Boot 的 logback 基础配置 -->
+<!--    <include resource="org/springframework/boot/logging/logback/defaults.xml" />-->
+
+    <springProperty scope="context" name="MODULE_NAME" source="spring.application.name" defaultValue="imp-admin-app"/>
+    <property name="FILE_HOME" value="/app/logs/${MODULE_NAME}"/>
+    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %p {%t} %c{1.}#%M %L LINE_CONTENT: %m%n" />
+
+    <!-- 控制台 Appender -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">　　　　　
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 文件 Appender -->
+    <!-- 参考 Spring Boot 的 file-appender.xml 编写 -->
+    <appender name="SYS_INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 日志文件名 -->
+        <file>${FILE_HOME}/info.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <!--过滤器,只打INFO级别的日志，日志文件最多保留15天（如果是按天滚动）-->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch> <!-- 表示匹配该级别及以上 -->
+            <onMismatch>DENY</onMismatch> <!-- 表示不匹配该级别以下的 -->
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 滚动后的日志文件名 -->
+            <fileNamePattern>${LOGBACK_ROLLINGPOLICY_FILE_NAME_PATTERN:-${FILE_HOME}/info.%d{yyyy-MM-dd}.%i.log.gz}</fileNamePattern>
+            <!-- 启动服务时，是否清理历史日志，一般不建议清理 -->
+            <cleanHistoryOnStart>${LOGBACK_ROLLINGPOLICY_CLEAN_HISTORY_ON_START:-false}</cleanHistoryOnStart>
+            <!-- 日志文件，到达多少容量，进行滚动 -->
+            <maxFileSize>${LOGBACK_ROLLINGPOLICY_MAX_FILE_SIZE:-100MB}</maxFileSize>
+            <!-- 日志文件的总大小，0 表示不限制 -->
+            <totalSizeCap>${LOGBACK_ROLLINGPOLICY_TOTAL_SIZE_CAP:-0}</totalSizeCap>
+            <!-- 日志文件的保留天数 -->
+            <maxHistory>${LOGBACK_ROLLINGPOLICY_MAX_HISTORY:-30}</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="SYS_ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${FILE_HOME}/error.log</File>
+        <append>true</append>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <!--过滤器,只打ERROR级别的日志-->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 滚动后的日志文件名 -->
+            <fileNamePattern>${FILE_HOME}/error.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <!-- 启动服务时，是否清理历史日志，一般不建议清理 -->
+            <cleanHistoryOnStart>false</cleanHistoryOnStart>
+            <!-- 日志文件，到达多少容量，进行滚动 -->
+            <maxFileSize>100MB</maxFileSize>
+            <!-- 日志文件的总大小，0 表示不限制 -->
+            <totalSizeCap>0</totalSizeCap>
+            <!-- 日志文件的保留天数 -->
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <!-- 异步写入日志，提升性能 -->
+    <appender name="ASYNC_INFO" class="ch.qos.logback.classic.AsyncAppender">
+        <!-- 不丢失日志。默认的，如果队列的 80% 已满,则会丢弃 TRACT、DEBUG、INFO 级别的日志 -->
+        <discardingThreshold>0</discardingThreshold>
+        <!-- 更改默认的队列的深度，该值会影响性能。默认值为 256 -->
+        <queueSize>256</queueSize>
+        <appender-ref ref="SYS_INFO"/>
+    </appender>
+
+    <appender name="ASYNC_ERROR" class="ch.qos.logback.classic.AsyncAppender">
+        <!-- 不丢失日志。默认的，如果队列的 80% 已满,则会丢弃 TRACT、DEBUG、INFO 级别的日志 -->
+        <discardingThreshold>0</discardingThreshold>
+        <!-- 更改默认的队列的深度，该值会影响性能。默认值为 256 -->
+        <queueSize>256</queueSize>
+        <appender-ref ref="SYS_ERROR"/>
+    </appender>
+
+    <!-- 本地环境 -->
+    <springProfile name="local">
+        <root level="INFO">
+            <appender-ref ref="STDOUT"/>
+            <appender-ref ref="ASYNC_INFO"/>
+            <appender-ref ref="ASYNC_ERROR"/>
+        </root>
+    </springProfile>
+    <!-- 其它环境 -->
+    <springProfile name="dev,sit,uat,prd">
+        <root level="INFO">
+            <appender-ref ref="STDOUT"/>
+            <appender-ref ref="ASYNC_INFO"/>
+            <appender-ref ref="ASYNC_ERROR"/>
+        </root>
+    </springProfile>
+
+</configuration>

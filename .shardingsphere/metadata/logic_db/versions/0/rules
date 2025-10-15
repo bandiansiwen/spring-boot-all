@@ -1,0 +1,4 @@
+- !READWRITE_SPLITTING
+  loadBalancers:
+    round_robin:
+      type: ROUND_ROBIN

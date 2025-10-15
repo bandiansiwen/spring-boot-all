@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>imp-dependencies</artifactId>
+    <groupId>com.imp.all</groupId>
+    <version>${revision}</version>
+    <packaging>pom</packaging>
+
+    <name>${project.artifactId}</name>
+    <description>基础 bom 文件，管理整个项目的依赖版本</description>
+    <url>https://gitee.com/gitee_longlin/spring-boot-all</url>
+
+    <properties>
+        <revision>1.0.0-SNAPSHOT</revision>
+        <imp-security.version>1.0.0-SNAPSHOT</imp-security.version>
+        <!-- 统一依赖管理 -->
+        <spring.boot.version>2.4.13</spring.boot.version>
+        <!-- Web 相关 -->
+        <swagger.version>3.0.0</swagger.version>
+        <!-- DB 相关 -->
+        <druid.version>1.2.15</druid.version>
+        <mybatis-plus.version>3.5.2</mybatis-plus.version>
+        <dynamic-datasource.version>3.5.2</dynamic-datasource.version>
+        <redisson.version>3.15.6</redisson.version>
+        <ojdbc8.version>21.1.0.0</ojdbc8.version>
+        <orai18n.version>21.1.0.0</orai18n.version>
+        <xdb6.version>18.3.0.0</xdb6.version>
+        <!-- 服务保障相关 -->
+        <resilience4j.version>1.7.1</resilience4j.version>
+        <!-- 工具类相关 -->
+        <hutool.version>5.7.22</hutool.version>
+        <jjwt.version>0.11.2</jjwt.version>
+        <netty.version>4.1.63.Final</netty.version>
+        <guava.version>30.1.1-jre</guava.version>
+        <jsqlparser.version>4.4</jsqlparser.version>
+        <jol.version>0.16</jol.version>
+        <easypoi.version>4.4.0</easypoi.version>
+        <easyexcel.version>3.0.5</easyexcel.version>
+        <poi.version>4.1.1</poi.version>
+        <springboot.version>2.4.13</springboot.version>
+        <sharding-jdbc.version>4.1.1</sharding-jdbc.version>
+        <shardingsphere.version>5.1.2</shardingsphere.version>
+        <cat.version>3.1.0</cat.version>
+        <commons-fileupload.version>1.3.3</commons-fileupload.version>
+        <commons-io.version>2.11.0</commons-io.version>
+        <tika-core.version>2.5.0</tika-core.version>
+        <transmittable-thread-local.version>2.14.0</transmittable-thread-local.version>
+        <commons-net.version>3.8.0</commons-net.version>
+        <jsch.version>0.1.55</jsch.version>
+        <!-- 三方云服务相关 -->
+        <minio.version>8.2.2</minio.version>
+        <metadata-extractor.version>2.19.0</metadata-extractor.version>
+        <protobuf-java.version>3.25.2</protobuf-java.version>
+        <ip2region.version>2.7.0</ip2region.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- 统一依赖管理 -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring.boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- Spring 核心 -->
+            <dependency>
+                <!-- 用于生成自定义的 Spring @ConfigurationProperties 配置类的说明文件 -->
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-configuration-processor</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-test</artifactId>
+                <version>${spring.boot.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>asm</artifactId>
+                        <groupId>org.ow2.asm</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.mockito</groupId>
+                        <artifactId>mockito-core</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>com.imp.all</groupId>
+                <artifactId>imp-common</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <!-- Web 相关 -->
+            <dependency>
+                <groupId>com.imp.all</groupId>
+                <artifactId>imp-spring-boot-starter-web</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.imp.all</groupId>
+                <artifactId>imp-spring-boot-starter-security</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.imp.all</groupId>
+                <artifactId>imp-spring-boot-starter-mybatis</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.imp.all</groupId>
+                <artifactId>imp-spring-boot-starter-redis</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <!--Hutool Java工具包-->
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool.version}</version>
+            </dependency>
+            <!--集成druid连接池-->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+            <!--oracle数据库驱动-->
+            <dependency>
+                <groupId>com.oracle.database.jdbc</groupId>
+                <artifactId>ojdbc8</artifactId>
+                <version>${ojdbc8.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.oracle.database.nls</groupId>
+                <artifactId>orai18n</artifactId>
+                <version>${orai18n.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.oracle.database.xml</groupId>
+                <artifactId>xdb6</artifactId>
+                <version>${xdb6.version}</version>
+            </dependency>
+            <!--mybatis-plus-->
+            <!--尽量不要同时导入 mybatis 和 mybatis-plus！避免版本的差异造成无法预知的问题-->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>dynamic-datasource-spring-boot-starter</artifactId> <!-- 多数据源 -->
+                <version>${dynamic-datasource.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.shardingsphere</groupId>
+                <artifactId>shardingsphere-jdbc-core-spring-boot-starter</artifactId>
+                <version>${shardingsphere.version}</version>
+            </dependency>
+            <!--jjwt-->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-api</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-impl</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-jackson</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+            <!--swagger-->
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-boot-starter</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
+            <!--netty-->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-all</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <!--guava-->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+            <!--redisson 分布式锁-->
+            <dependency>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson-spring-boot-starter</artifactId>
+                <version>${redisson.version}</version>
+            </dependency>
+            <!-- sql 解析 -->
+            <dependency>
+                <groupId>com.github.jsqlparser</groupId>
+                <artifactId>jsqlparser</artifactId>
+                <version>${jsqlparser.version}</version>
+            </dependency>
+            <!-- 查看Java 对象布局、大小工具 -->
+            <dependency>
+                <groupId>org.openjdk.jol</groupId>
+                <artifactId>jol-core</artifactId>
+                <version>${jol.version}</version>
+            </dependency>
+            <!-- excel导入导出 -->
+            <dependency>
+                <groupId>cn.afterturn</groupId>
+                <artifactId>easypoi-spring-boot-starter</artifactId>
+                <version>${easypoi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>easyexcel</artifactId>
+                <version>${easyexcel.version}</version>
+            </dependency>
+            <!-- 统一 poi 版本 -->
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml-schemas</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+            <!-- spring-boot 2.3 之后需要手动引入，版本同 spring-boot-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-validation</artifactId>
+                <version>${springboot.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.dianping.cat</groupId>
+                <artifactId>cat-client</artifactId>
+                <version>${cat.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-fileupload</groupId>
+                <artifactId>commons-fileupload</artifactId>
+                <version>${commons-fileupload.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.minio</groupId>
+                <artifactId>minio</artifactId>
+                <version>${minio.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.tika</groupId>
+                <artifactId>tika-core</artifactId> <!-- 文件类型的识别 -->
+                <version>${tika-core.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>transmittable-thread-local</artifactId> <!-- 解决 ThreadLocal 父子线程的传值问题 -->
+                <version>${transmittable-thread-local.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-net</groupId>
+                <artifactId>commons-net</artifactId> <!-- 解决 ftp 连接 -->
+                <version>${commons-net.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jcraft</groupId>
+                <artifactId>jsch</artifactId> <!-- 解决 sftp 连接 -->
+                <version>${jsch.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.github.resilience4j</groupId>
+                <artifactId>resilience4j-ratelimiter</artifactId>
+                <version>${resilience4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.drewnoakes</groupId>
+                <artifactId>metadata-extractor</artifactId>
+                <version>${metadata-extractor.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.protobuf</groupId>
+                <artifactId>protobuf-java</artifactId>
+                <version>${protobuf-java.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.lionsoul</groupId>
+                <artifactId>ip2region</artifactId>
+                <version>${ip2region.version}</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+</project>

@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.imp.all.framework.redis.config.ImpCacheAutoConfiguration,\
+  com.imp.all.framework.redis.config.ImpRedisAutoConfiguration

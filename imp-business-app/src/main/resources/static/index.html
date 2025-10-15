@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>Bootstrap 101 Template</title>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+
+  </head>
+  <body>
+    <div>
+        <ul id="thisDanWei" class="nav nav-tabs class="col-md-12" style="margin-top: 5px;">
+            <li class="active col-md-4 paiban" onclick="updatePaiBan(this)" danwei="吨"><a href="#">以吨为单位排班</a></li>
+            <li class="col-md-4 paiban" onclick="updatePaiBan(this)" danwei="箱"><a href="#">以箱为单位排班</a></li>
+            <li class="col-md-4 paiban" onclick="updatePaiBan(this)" danwei="车"><a href="#">以车为单位排班</a></li>
+        </ul>
+        <div class="col-md-12" style="margin-top: 5px;">
+            <form class="form-horizontal" id="submitForm">
+                <div class="form-group div-a">
+                    <label class="col-sm-2 control-label a-label">A类型的车可装数量</label>
+                    <div class="col-sm-9">
+                    <input type="text" class="form-control a-input" id="a" name="a" placeholder="A类型的车可装数量">
+                    </div>
+                    <label class="col-sm-1 control-label a-danwei" style="text-align: left;">/吨</label>
+                </div>
+                <div class="form-group div-b">
+                    <label class="col-sm-2 control-label b-label">B类型的车可装数量</label>
+                    <div class="col-sm-9">
+                    <input type="text" class="form-control b-input" id="b" name="b" placeholder="B类型的车可装数量">
+                    </div>
+                    <label class="col-sm-1 control-label b-danwei" style="text-align: left;">/吨</label>
+                </div>
+                <div class="form-group div-c">
+                    <label class="col-sm-2 control-label c-label">C类型的车可装数量</label>
+                    <div class="col-sm-9">
+                    <input type="text" class="form-control" id="c" name="c" placeholder="C类型的车可装数量">
+                    </div>
+                    <label class="col-sm-1 control-label c-danwei" style="text-align: left;">/吨</label>
+                </div>
+                
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">厂区工作时间</label>
+                    <div class="col-sm-9">
+                    <input type="text" class="form-control" id="time" name="time" placeholder="厂区工作时间">
+                    </div>
+                    <label class="col-sm-1 control-label" style="text-align: left;">/小时</label>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">同时装货量</label>
+                    <div class="col-sm-9">
+                    <input type="text" class="form-control" id="loadNum" name="loadNum" placeholder="同时装货量">
+                    </div>
+                    <label class="col-sm-1 control-label" style="text-align: left;">/车</label>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">平均等货时间</label>
+                    <div class="col-sm-9">
+                    <input type="text" class="form-control" id="loadTime" name="loadTime" placeholder="平均等货时间">
+                    </div>
+                    <label class="col-sm-1 control-label" style="text-align: left;">/分钟</label>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">要求送达时间</label>
+                    <div class="col-sm-9">
+                    <input type="text" class="form-control" id="day" name="day" placeholder="要求送达时间">
+                    </div>
+                    <label class="col-sm-1 control-label" style="text-align: left;">/天</label>
+                </div>
+                <div class="form-group div-sel">
+                    <label class="col-sm-2 control-label">优先选择</label>
+                    <div class="col-sm-9">
+                        <label class="radio-inline">
+                            <input type="radio" checked name="priority" id="inlineRadio1" value="true"> 时间优先
+                          </label>
+                          <label class="radio-inline">
+                            <input type="radio" name="priority" id="inlineRadio2" value="false"> 装载量优先
+                          </label>
+                    </div>
+                </div>
+                <input type="text" hidden="hidden" id="weight" name="weight">
+                <input type="text" hidden="hidden" id="transTime" name="transTime">
+                <input type="text" hidden="hidden" id="type" name="type">
+                <input type="text" hidden="hidden" id="num" name="num">
+            </form>
+            <ul id="thisLuXian" class="nav nav-tabs class="col-md-12" style="margin-top: 5px;">
+                <li class="active col-md-6 luxian-li" onclick="luxian(this)" number="one"><a href="#">单路线</a></li>
+                <li class="col-md-6 luxian-li" onclick="luxian(this)" number="many"><a href="#">多路线</a></li>
+            </ul>
+            <div id="many-data" class="form-horizontal" style="margin-top: 10px;">
+                <div class="form-group div-total" label="div-total">
+                    <label class="col-sm-2 control-label total-label">发货总数量</label>
+                    <div class="col-sm-7">
+                    <input type="text" class="form-control total-input" name="manyWeight" placeholder="发货总数量">
+                    </div>
+                    <label class="col-sm-1 control-label total-danwei" style="text-align: left;">/吨</label>
+                    <div class="col-sm-2">
+                        <label class="btn glyphicon glyphicon-plus btn-success jia-label" onclick="jia(this)"></label>
+                        <label class="btn glyphicon glyphicon-minus btn-danger jian-label" onclick="jian(this)"></label>
+                    </div>
+                </div>
+                <div class="form-group div-aa" label="div-aa">
+                    <label class="col-sm-2 control-label aa-label">A类型的车可装数量</label>
+                    <div class="col-sm-7">
+                    <input type="text" class="form-control aa-input" name="manyA" placeholder="A类型的车可装数量">
+                    </div>
+                    <label class="col-sm-1 control-label a-danwei" style="text-align: left;">/吨</label>
+                    <div class="col-sm-2">
+                        <label class="btn glyphicon glyphicon-plus btn-success jia-label" onclick="jia(this)"></label>
+                        <label class="btn glyphicon glyphicon-minus btn-danger jian-label" onclick="jian(this)"></label>
+                    </div>
+                </div>
+                <div class="form-group div-bb" label="div-bb">
+                    <label class="col-sm-2 control-label bb-label">B类型的车可装数量</label>
+                    <div class="col-sm-7">
+                    <input type="text" class="form-control bb-input" name="manyB" placeholder="B类型的车可装数量">
+                    </div>
+                    <label class="col-sm-1 control-label b-danwei" style="text-align: left;">/吨</label>
+                    <div class="col-sm-2">
+                        <label class="btn glyphicon glyphicon-plus btn-success jia-label" onclick="jia(this)"></label>
+                        <label class="btn glyphicon glyphicon-minus btn-danger jian-label" onclick="jian(this)"></label>
+                    </div>
+                </div>
+                <div class="form-group div-cc" label="div-cc">
+                    <label class="col-sm-2 control-label cc-label">C类型的车可装数量</label>
+                    <div class="col-sm-7">
+                    <input type="text" class="form-control" name="manyC" placeholder="C类型的车可装数量">
+                    </div>
+                    <label class="col-sm-1 control-label c-danwei" style="text-align: left;">/吨</label>
+                    <div class="col-sm-2">
+                        <label class="btn glyphicon glyphicon-plus btn-success jia-label" onclick="jia(this)"></label>
+                        <label class="btn glyphicon glyphicon-minus btn-danger jian-label" onclick="jian(this)"></label>
+                    </div>
+                    
+                </div>
+                <div class="form-group div-time" label="div-time">
+                    <label class="col-sm-2 control-label">线路所需时间</label>
+                    <div class="col-sm-7">
+                    <input type="text" class="form-control" name="manyTransTime" placeholder="线路所需时间">
+                    </div>
+                    <label class="col-sm-1 control-label" style="text-align: left;">/小时</label>
+                    <div class="col-sm-2">
+                        <label class="btn glyphicon glyphicon-plus btn-success jia-label" onclick="jia(this)"></label>
+                        <label class="btn glyphicon glyphicon-minus btn-danger jian-label" onclick="jian(this)"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-1 col-sm-10">
+                <button class="btn btn-info" onclick="submit()"><b>提交排班计划</b></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function(){
+            $(".jia-label").hide();
+            $(".jian-label").hide();
+            $(".div-aa").hide();
+            $(".div-bb").hide();
+            $(".div-cc").hide();
+            $("#myModal").show();
+        })
+        function updatePaiBan(obj){
+            $(".paiban").attr("class","col-md-4 paiban");
+            $(obj).attr("class","active col-md-4 paiban");
+            var danwei = $(obj).attr("danwei");
+            if(danwei == "吨"){
+                $(".a-danwei").html("/吨");
+                $(".b-danwei").html("/吨");
+                $(".c-danwei").html("/吨");
+                $(".total-danwei").html("/吨");
+                $(".div-total").show();
+                $(".div-sel").show();
+                $(".div-a").show();
+                $(".div-b").show();
+                $(".div-c").show();
+                $(".div-aa").hide();
+                $(".div-bb").hide();
+                $(".div-cc").hide();
+            }else if(danwei == "箱"){
+                $(".a-danwei").html("/箱");
+                $(".b-danwei").html("/箱");
+                $(".c-danwei").html("/箱");
+                $(".total-danwei").html("/箱");
+                $(".div-total").show();
+                $(".div-sel").show();
+                $(".div-a").show();
+                $(".div-b").show();
+                $(".div-c").show();
+                $(".div-aa").hide();
+                $(".div-bb").hide();
+                $(".div-cc").hide();
+            }else if(danwei == "车"){
+                $(".a-danwei").html("/车");
+                $(".b-danwei").html("/车");
+                $(".c-danwei").html("/车");
+                $(".div-total").hide();
+                $(".div-sel").hide();
+                //看看是不是多路线哦
+                var luxian = $("#thisLuXian .active").attr("number");
+                if(luxian == "many"){
+                    $(".div-a").hide();
+                    $(".div-b").hide();
+                    $(".div-c").hide();
+                    $(".div-aa").show();
+                    $(".div-bb").show();
+                    $(".div-cc").show();
+                }
+            }else{
+                alert("选择错误请联系管理员！！！")
+            }
+        }
+
+        function luxian(obj){
+            $("#thisLuXian .luxian-li").attr("class","col-md-6 luxian-li");
+            $(obj).attr("class","active col-md-6 luxian-li");
+            var number = $(obj).attr("number");
+            if(number == "one"){
+                $(".div-aa").hide();
+                $(".div-bb").hide();
+                $(".div-cc").hide();
+                $(".jia-label").hide();
+                $(".jian-label").hide();
+                $(".div-a").show();
+                $(".div-b").show();
+                $(".div-c").show();
+                $(".div-aa").hide();
+                $(".div-bb").hide();
+                $(".div-cc").hide();
+                //单路线把多路线的东西去掉
+                $("#many-data .div-total").each(function(index,obj){
+                    if(index != 0){
+                        $(obj).remove();
+                    }
+                })
+                $("#many-data .div-aa").each(function(index,obj){
+                    if(index != 0){
+                        $(obj).remove();
+                    }
+                })
+                $("#many-data .div-bb").each(function(index,obj){
+                    if(index != 0){
+                        $(obj).remove();
+                    }
+                })
+                $("#many-data .div-cc").each(function(index,obj){
+                    if(index != 0){
+                        $(obj).remove();
+                    }
+                })
+                $("#many-data .div-time").each(function(index,obj){
+                    if(index != 0){
+                        $(obj).remove();
+                    }
+                })
+            }else if(number == "many"){
+                $(".jia-label").show();
+                $(".jian-label").show();
+                // 看看是不是以车为单位
+                var danwei = $("#thisDanWei .active").attr("danwei");
+                if(danwei == "车"){
+                    $(".div-a").hide();
+                    $(".div-b").hide();
+                    $(".div-c").hide();
+                    $(".div-aa").show();
+                    $(".div-bb").show();
+                    $(".div-cc").show();
+                }
+            }else{
+                alert("选择错误请联系管理员！！！")
+            }
+        }
+        function jia(obj){
+            var object = $(obj).parent().parent();
+            var content = object.prop("outerHTML");
+            object.after(content);
+        }
+        function jian(obj){
+            $(obj).parent().parent().remove();
+        }
+        function submit(){
+            $("#type").val($("#thisDanWei .active").attr("danwei"));
+            $("#num").val($("#thisLuXian .active").attr("number"));
+            var manyWeight="";
+            var manyA="";
+            var manyB="";
+            var manyC="";
+            var manyTransTime="";
+            $("#many-data .form-group").each(function(index,li){
+                if($(li).find("input").attr("name") == "manyWeight"){
+                    var weight = $(li).find("input").val();
+                    if(weight != null && weight != ""){
+                        manyWeight += "," + weight;
+                    }
+                }
+                if($(li).find("input").attr("name") == "manyA"){
+                    var a = $(li).find("input").val();
+                    if(a != null && a != ""){
+                        manyA += "," + a;
+                    }
+                }
+                if($(li).find("input").attr("name") == "manyB"){
+                    var b = $(li).find("input").val();
+                    if(b != null && b != ""){
+                        manyB += "," + b;
+                    }
+                }
+                if($(li).find("input").attr("name") == "manyC"){
+                    var c = $(li).find("input").val();
+                    if(c != null && c != ""){
+                        manyC += "," + c;
+                    }
+                }
+                if($(li).find("input").attr("name") == "manyTransTime"){
+                    var transTime = $(li).find("input").val();
+                    if(transTime != null && transTime != ""){
+                        manyTransTime += "," + transTime;
+                    }
+                }
+            })
+            if(manyWeight != ""){
+                $("#weight").val(manyWeight.substring(1))
+            }
+            if(manyA != ""){
+                $("#a").val(manyA.substring(1))
+            }
+            if(manyB != ""){
+                $("#b").val(manyB.substring(1))
+            }
+            if(manyC != ""){
+                $("#c").val(manyC.substring(1))
+            }
+            if(manyTransTime != ""){
+                $("#transTime").val(manyTransTime.substring(1))
+            }
+            //发送请求
+            console.log($("#submitForm").serialize());
+            $.ajax({
+                // url: "http://www.simengyun.com:8080/add",
+                url: "http://localhost:8891/add",
+                type: "get",
+                contentType: "application/json; charset=utf-8",
+                data: $("#submitForm").serialize(),
+                dataType: "json",
+                success: function (data) {
+                    var html = '';
+                    for(var i=0; i<data.length; i++){
+                        html += data[i];
+                    }
+                    alert(html);
+                }
+            })
+        }
+    </script>
+  </body>
+</html>

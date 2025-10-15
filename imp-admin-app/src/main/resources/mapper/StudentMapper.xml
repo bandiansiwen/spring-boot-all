@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.imp.all.dao.StudentMapper">
+
+    <insert id="addStudent">
+        insert into student(phone, name, age) values (#{phone}, #{name}, #{age})
+    </insert>
+    
+    <insert id="batchAddStudent">
+        insert into student(phone, name, age) values
+        <foreach collection="students" index="index" item="st" separator=",">
+            (#{phoneNumber}, #{st.name}, #{st.age})
+        </foreach>
+    </insert>
+
+    <delete id="batchDeleteStudent">
+        <foreach collection="students" index="index" item="st">
+            delete from student where id = #{st};
+        </foreach>
+    </delete>
+
+    <select id="findStudentByPhone" resultType="com.imp.all.entity.Student">
+        select * from student where phone=#{phone}
+    </select>
+
+    <select id="findByName" resultType="com.imp.all.entity.Student">
+        select * from student where name=#{name}
+    </select>
+
+    <insert id="insertStudent">
+        insert into student(phone, name, age) values (#{phoneNumber}, #{name}, #{age})
+    </insert>
+</mapper>

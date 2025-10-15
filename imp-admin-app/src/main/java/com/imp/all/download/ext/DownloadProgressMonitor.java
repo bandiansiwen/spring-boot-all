@@ -1,0 +1,23 @@
+package com.imp.all.download.ext;
+
+/**
+ * @author Longlin
+ * @date 2023/11/29 15:13
+ * @description
+ */
+public interface DownloadProgressMonitor {
+
+    /**
+     * 计算下载进度
+     *
+     * @param contentLength 文件总大小
+     */
+    void calculateDownloadProgress(long contentLength);
+
+    /**
+     * 返回已下载的字节数
+     *
+     * @return
+     */
+    long getAlreadyDownloadLength();
+}

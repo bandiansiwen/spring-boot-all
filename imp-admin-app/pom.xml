@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>spring-boot-all</artifactId>
+        <groupId>com.imp.all</groupId>
+        <version>${revision}</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>imp-admin-app</artifactId>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+
+        <start-class>com.imp.all.AdminApplication</start-class>
+    </properties>
+
+    <dependencies>
+<!--        <dependency>-->
+<!--            <groupId>com.imp.all</groupId>-->
+<!--            <artifactId>imp-security</artifactId>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>com.imp.all</groupId>
+            <artifactId>imp-spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.imp.all</groupId>
+            <artifactId>imp-spring-boot-starter-mybatis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.imp.all</groupId>
+            <artifactId>imp-spring-boot-starter-redis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.openjdk.jol</groupId>
+            <artifactId>jol-core</artifactId>
+        </dependency>
+        <!-- 暂时注释，因为会引起logback报错 -->
+<!--        <dependency>-->
+<!--            <groupId>com.oracle.database.jdbc</groupId>-->
+<!--            <artifactId>ojdbc8</artifactId>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>com.oracle.database.nls</groupId>-->
+<!--            <artifactId>orai18n</artifactId>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>com.oracle.database.xml</groupId>-->
+<!--            <artifactId>xdb6</artifactId>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>cn.afterturn</groupId>
+            <artifactId>easypoi-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- 下载 -->
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+        <!-- 做断点下载使用 -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.drewnoakes</groupId>
+            <artifactId>metadata-extractor</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.imp.all</groupId>
+            <artifactId>lib-file-client</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.lionsoul</groupId>
+            <artifactId>ip2region</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba.csp</groupId>
+            <artifactId>sentinel-parameter-flow-control</artifactId>
+            <version>1.8.8</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.csp</groupId>
+            <artifactId>sentinel-transport-simple-http</artifactId>
+            <version>1.8.8</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.csp</groupId>
+            <artifactId>sentinel-annotation-aspectj</artifactId>
+            <version>1.8.8</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <!-- 生成的包名 -->
+        <finalName>imm-admin-app</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.4.13</version>
+<!--                <configuration>-->
+<!--                    <mainClass>com.imp.all.AdminApplication</mainClass>-->
+<!--                </configuration>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <goals>-->
+<!--                            <goal>repackage</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+                <!-- 打thin包-->
+<!--                <dependencies>-->
+<!--                    <dependency>-->
+<!--                        <groupId>org.springframework.boot.experimental</groupId>-->
+<!--                        <artifactId>spring-boot-thin-layout</artifactId>-->
+<!--                        <version>1.0.27.RELEASE</version>-->
+<!--                    </dependency>-->
+<!--                </dependencies>-->
+            </plugin>
+
+            <!-- 打thin包-->
+<!--            <plugin>-->
+<!--                <groupId>org.springframework.boot.experimental</groupId>-->
+<!--                <artifactId>spring-boot-thin-maven-plugin</artifactId>-->
+<!--                <version>1.0.27.RELEASE</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        &lt;!&ndash;在编译时下载依赖包 &ndash;&gt;-->
+<!--                        <id>resolve</id>-->
+<!--                        <goals>-->
+<!--                            <goal>resolve</goal>-->
+<!--                        </goals>-->
+<!--                        <inherited>false</inherited>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
+
+            <!-- 测试类打包失败请加上 -->
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-surefire-plugin</artifactId>-->
+<!--                <configuration>-->
+<!--                    <skipTests>true</skipTests>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
+        </plugins>
+    </build>
+
+</project>

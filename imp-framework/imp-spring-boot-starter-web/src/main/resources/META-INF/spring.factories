@@ -1,0 +1,11 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.imp.all.framework.web.apiVersion.config.ApiAutoConfiguration,\
+  com.imp.all.framework.web.requestLimit.config.LimitConfig,\
+  com.imp.all.framework.web.cors.ImpCorsConfig,\
+  com.imp.all.framework.web.holder.HoldConfig,\
+  com.imp.all.framework.web.webFilter.config.WebConfig
+
+
+
+org.springframework.boot.SpringApplicationRunListener=\
+com.imp.all.framework.web.listener.ImpEnvironmentPrepareRunListener

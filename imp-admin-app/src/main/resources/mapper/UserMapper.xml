@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.imp.all.dao.UserMapper">
+    <select id="getAllUsers" resultType="com.imp.all.entity.AdminUser">
+        select * from tb_sys_user
+    </select>
+
+    <select id="getUserByName" resultType="com.imp.all.entity.AdminUser">
+        select * from tb_sys_user au
+        <where>
+            <if test="name!=null and name!=''">
+                and au.username=#{name}
+            </if>
+        </where>
+    </select>
+
+    <update id="updateUserNickName">
+        update tb_sys_user set nick_name=#{nickName} where username=#{userName}
+    </update>
+
+    <insert id="insertUser">
+        insert into tb_sys_user(username, password) values (#{username}, #{password})
+    </insert>
+</mapper>

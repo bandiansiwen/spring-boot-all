@@ -1,0 +1,143 @@
+server:
+  port: 8888
+
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    # 驱动不同 mysql 5.6以下  com.mysql.jdbc.Driver
+    #         mysql 5.6以上  com.mysql.cj.jdbc.Driver、需要增加时区的配置serverTimezone=GMT%2B8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/spring-boot-all?autoReconnect=true&allowMultiQueries=true&failOverReadOnly=false&autoReconnectForPools=true&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8
+    username: root
+    password: 123456
+    druid:
+      # 配置初始化大小、最小、最大线程数
+      initialSize: 5
+      minIdle: 5
+      # CPU核数+1，也可以大些但不要超过20，数据库加锁时连接过多性能下降
+      maxActive: 20
+      # 最大等待时间，内网：800，外网：1200（三次握手1s）
+      maxWait: 6000
+      # 1) Destroy线程会检测连接的间隔时间2) testWhileIdle的判断依据，详细看testWhileIdle属性的说明
+      timeBetweenEvictionRunsMillis: 60000
+      # 配置一个连接在池中最大空间时间，单位是毫秒
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: SELECT 1
+      testWhileIdle: true
+      # 设置从连接池获取连接时是否检查连接有效性，true检查，false不检查
+      testOnBorrow: true
+      # 设置从连接池归还连接时是否检查连接有效性，true检查，false不检查
+      testOnReturn: true
+      # 可以支持PSCache（提升写入、查询效率）
+      poolPreparedStatements: true
+      # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+#      filters: stat,wall,log4j
+      # 保持长连接
+      keepAlive: true
+      maxPoolPreparedStatementPerConnectionSize: 20
+      useGlobalDataSourceStat: true
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+      web-stat-filter:
+        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*" #不统计这些请求数据
+      stat-view-servlet: #访问监控网页的登录用户名和密码
+        login-username: druid
+        login-password: druid
+  # Redis 配置。Redisson 默认的配置足够使用，一般不需要进行调优
+  redis:
+    # 单机版
+    host: 127.0.0.1
+    port: 6379
+    database: 0
+#    password:
+    timeout: 2000
+    # 集群版
+#    cluster:
+#      nodes:
+#        - 192.168.0.1:7001
+#        - 192.168.0.1:7002
+#        - 192.168.0.1:7003
+#      max-redirects: 3 # 获取失败 最大重定向次数
+#    lettuce:
+#      pool:
+#        # 连接池最大连接数 使用负值表示没有限制
+#        max-active: 50
+#        # 连接池最大阻塞等待时间（使用负值表示没有限制）
+#        max-wait: -1
+#        # 连接池中的最大空闲连接 默认 8
+#        max-idle: 10
+#        # 连接池中的最小空闲连接 默认 0
+#        min-idle: 5
+#        #eviction线程调度时间间隔，每ms运行一次空闲连接回收器（独立线程），设置之后再调用redis connection会达到min-idle数
+#        time-between-eviction-runs: 100000
+  cache:
+    type: redis
+    redis:
+      time-to-live: 1h   # 指定redis中的过期时间为1h
+#      key-prefix: CACHE_      # 如果指定前缀就用指定的前缀，没有就使用缓存的名字为前缀
+      use-key-prefix: true
+      cache-null-values: true # 是否缓存空值，防止缓存穿透
+
+logging:
+  level:
+    root: info
+    com.imp.all.dao: debug
+
+management:
+  server:
+    port: 8800  #actuator端口
+  endpoints:
+    web:
+      base-path: /actuator  #修改访问路径
+      exposure:
+        include: '*'  #开放所有页面节点  默认只开启了health、info两个节点
+  endpoint:
+    health:
+      show-details: always  #显示健康具体信息  默认不会显示详细信息
+    shutdown:
+      enabled: true  #启用shutdown端点
+
+
+# imp-common-web配置
+imp:
+  jwt:
+    tokenHeader: Authorization                                                    #JWT存储的请求头
+    secret: imp-admin-app-secret-1234567890!@#$%^&*()QWERTYUIOPASDFGHJKLZXCVBNM       #JWT加解密使用的密钥
+    expiration: 604800                                                            #JWT的超期限时间(60*60*24*7)
+    tokenPrefix: 'Bearer '                                                        #JWT负载中拿到开头
+  secure:
+    ignored:
+      urls:
+        - /**
+        - /root/**
+        - /user/register
+        - /user/login
+        - /**/swagger-ui/**           #swagger
+        - /**/swagger-resources/**
+        - /**/v3/**
+        - /api/version/**             #接口多版本
+        - /idempotent/**              #接口幂等性
+  api-version:
+    enable: true
+    header: x-api-version
+  mybatis-watch:
+    enable: true
+    locations:
+      - file:./imp-admin-app/src/main/resources/mapper/*.xml
+  httplog:
+    enable: false
+  httpAnnotationLog:
+    enable: false
+
+# 项目里面的配置
+redis:
+  database: demo
+  key:
+    admin: 'admin:user'
+  expire:
+    common: 86400 # 24小时
+
+webSocket:
+  netty:
+    enable: false
+    port: 9527
+    path: '/websocket'
