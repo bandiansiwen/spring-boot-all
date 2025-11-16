@@ -1,4 +1,4 @@
-package com.imp.all.demos.algorithm.dynamicProgramming;
+package com.imp.all.demos.algorithm.tutorial.dynamicProgramming;
 
 import com.imp.all.demos.algorithm.tree.binary.TreeNode;
 
