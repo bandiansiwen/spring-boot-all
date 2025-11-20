@@ -138,12 +138,43 @@ public class LeftRightArrayDemos {
         return maxLength;
     }
 
+    public static boolean checkStr(String str) {
+
+        boolean flag = false;
+
+        if (str == null || str.isEmpty() || str.length()%2 != 0) {
+            return false;
+        }
+
+        HashMap<String, String> map = new HashMap<>();
+        map.put("(", ")");
+        map.put("[", "]");
+        map.put("{", "}");
+        int i = 0;
+        int total = str.length() / 2;
+        for(; i < total; i++) {
+            char first = str.charAt(i);
+            char last = str.charAt(str.length()-1-i);
+            if (!map.get(first + "").equals(last + "")) {
+                break;
+            }
+        }
+        if (i == total) {
+            flag = true;
+        }
+        return flag;
+    }
+
 
     public static void main(String[] args) {
 
-        String s = "tmmzuxt";
-        int i = lengthOfLongestSubstring(s);
-        System.out.println(i);
+//        String s = "tmmzuxt";
+//        int i = lengthOfLongestSubstring(s);
+//        System.out.println(i);
+
+        System.out.println(checkStr("[()]"));
+
+        System.out.println(checkStr("[(])"));
 
 //        int[] nums3 = new int[]{0,1,2,3,4,5};
 //        int search = binarySearch(nums3, 5);
@@ -163,5 +194,7 @@ public class LeftRightArrayDemos {
 //        System.out.println(s1);
 //        String s2 = longestPalindrome("cbbd");
 //        System.out.println(s2);
+
+
     }
 }
